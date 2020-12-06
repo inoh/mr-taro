@@ -1,11 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { createGlobalStyle } from 'styled-components';
+import { Normalize } from 'styled-normalize';
+
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: 'Open Sans', sans-serif;
+  }
+`;
+
 ReactDOM.render(
   <React.StrictMode>
+    <Normalize />
+    <GlobalStyle />
     <App />
   </React.StrictMode>,
   document.getElementById('root')
