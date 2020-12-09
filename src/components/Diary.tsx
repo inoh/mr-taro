@@ -7,6 +7,7 @@ import TimeLabel from './TimeLabel';
 const Note = styled.p`
   margin: 0;
   padding: 5px;
+  font-size: 15px;
 `;
 
 const API_ENDPOINT = 'https://fusy5g07m4.execute-api.ap-northeast-1.amazonaws.com'
@@ -27,11 +28,12 @@ interface DiaryProps {
 }
 
 const Diary = ({ diary }: DiaryProps) => {
-  const page: Page = diary.pages.En;
+  const en_page: Page = diary.pages.En;
+  const ja_page: Page = diary.pages.Ja;
 
-  const speech = async (diaryId: string) => {
+  const speech = async (diaryId: string, lang: string) => {
     const context = new AudioContext();
-    const response = await fetch(`${API_ENDPOINT}/diaries/${diaryId}/speech/En`);
+    const response = await fetch(`${API_ENDPOINT}/diaries/${diaryId}/speech/${lang}`);
     const arrayBuffer = await response.arrayBuffer();
     const audioBuffer = await context.decodeAudioData(arrayBuffer);
     const source = context.createBufferSource();
@@ -42,11 +44,11 @@ const Diary = ({ diary }: DiaryProps) => {
 
   return (
     <>
-      <TimeLabel date={new Date(page.posted_at)} />
+      <TimeLabel date={new Date(en_page.posted_at)} />
 
-      <Note>{page.note}</Note>
+      <Note>{en_page.note}</Note>
 
-      <Button onClick={() => speech(diary.id)}>En</Button>
+      <Button onClick={() => speech(diary.id, 'En')}>En</Button>
     </>
   );
 }

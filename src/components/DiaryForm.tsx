@@ -37,7 +37,7 @@ type SubmitData = {
 const API_ENDPOINT = 'https://fusy5g07m4.execute-api.ap-northeast-1.amazonaws.com'
 
 const Form = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const onSubmit = handleSubmit<SubmitData>(async (data: any) => {
     const response = await fetch(
@@ -52,6 +52,7 @@ const Form = () => {
         })
       }
     );
+    reset();
     console.log(await response.json());
   });
 
