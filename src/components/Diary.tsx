@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import Button from './Button';
@@ -12,7 +12,7 @@ const Note = styled.p`
 
 const API_ENDPOINT = 'https://fusy5g07m4.execute-api.ap-northeast-1.amazonaws.com'
 
-type Diary = {
+export type Diary = {
   id: string;
   title: string;
   pages: any;
@@ -28,6 +28,8 @@ interface DiaryProps {
 }
 
 const Diary = ({ diary }: DiaryProps) => {
+  const [opened, setOpened] = useState(false);
+
   const en_page: Page = diary.pages.En;
   const ja_page: Page = diary.pages.Ja;
 
@@ -42,11 +44,16 @@ const Diary = ({ diary }: DiaryProps) => {
     source.start();
   }
 
+  const jaOpenAndClose = () => {
+    setOpened(!opened);
+  }
+
   return (
     <>
       <TimeLabel date={new Date(en_page.posted_at)} />
 
-      <Note>{en_page.note}</Note>
+      <Note onClick={jaOpenAndClose}>{en_page.note}</Note>
+      {opened && <Note>{ja_page.note}</Note>}
 
       <Button onClick={() => speech(diary.id, 'En')}>En</Button>
     </>

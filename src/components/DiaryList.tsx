@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import Diary from './Diary';
+import { getDiaries, Diary as DiaryProps } from '../apis/diary';
 
 const List = styled.ul`
   margin: 10px 0 0;
@@ -15,20 +16,16 @@ const ListItem = styled.li`
   background-color: #fff;
 `;
 
-const API_ENDPOINT = 'https://fusy5g07m4.execute-api.ap-northeast-1.amazonaws.com'
-
 const DiaryList = () => {
-  const [diaries, setDiaries] = useState<any>([]);
+  const [diaries, setDiaries] = useState<[DiaryProps]>();
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/diaries`)
-      .then(response => response.json())
-      .then((diaries) => setDiaries(diaries));
+    getDiaries().then((diaries) => setDiaries(diaries));
   }, []);
 
   return (
     <List>
-      {diaries.map((diary: any) => (
+      {diaries && diaries.map((diary: any) => (
         <ListItem key={diary.id}>
           <Diary diary={diary} />
         </ListItem>
