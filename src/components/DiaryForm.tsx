@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useForm } from 'react-hook-form';
 
 import Button from './Button';
+import { postDiary, Diary } from '../apis/diary';
 
 const StyledForm = styled.form`
   width: 100%;
@@ -34,26 +35,13 @@ type SubmitData = {
   note: string
 };
 
-const API_ENDPOINT = 'https://fusy5g07m4.execute-api.ap-northeast-1.amazonaws.com'
-
 const Form = () => {
   const { register, handleSubmit, reset } = useForm();
 
   const onSubmit = handleSubmit<SubmitData>(async (data: any) => {
-    const response = await fetch(
-      `${API_ENDPOINT}/diaries/En`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          title: data.note,
-          note: data.note,
-        })
-      }
-    );
+    const diary: Diary = await postDiary(data.note);
+    console.log(diary);
     reset();
-    console.log(await response.json());
   });
 
   return (
