@@ -1,10 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createGlobalStyle } from 'styled-components';
-import { Normalize } from 'styled-normalize';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { createGlobalStyle } from 'styled-components'
+import { Normalize } from 'styled-normalize'
 
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import store from 'app/store'
+import * as serviceWorker from './serviceWorker'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -12,14 +13,22 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Normalize />
-    <GlobalStyle />
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const render = () => {
+  const App = require('./app').default
+
+  ReactDOM.render(
+    <React.StrictMode>
+      <Normalize />
+      <GlobalStyle />
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>,
+    document.getElementById('root')
+  )
+}
+
+render()
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
