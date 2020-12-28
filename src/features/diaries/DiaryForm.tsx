@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form'
 
-import Button from './Button';
-import { postDiary, Diary } from '../apis/diary';
+import Button from 'components/Button'
+import { postDiary, Diary } from 'apis/diary'
 
 const StyledForm = styled.form`
   width: 100%;
   padding: 0;
-`;
+`
 
 const TextArea = styled.textarea`
   width: 100%;
@@ -19,7 +19,7 @@ const TextArea = styled.textarea`
   outline: none;
   resize: none;
   box-sizing: border-box;
-`;
+`
 
 const SubmitButton = styled(Button)`
   margin-top: 10px;
@@ -29,20 +29,20 @@ const SubmitButton = styled(Button)`
   font-size: 19px;
   font-weight: bold;
   border-radius: 20px;
-`;
+`
 
 type SubmitData = {
   note: string
-};
+}
 
-const Form = () => {
+export const DiaryForm = () => {
   const { register, handleSubmit, reset } = useForm();
 
   const onSubmit = handleSubmit<SubmitData>(async (data: any) => {
     const diary: Diary = await postDiary(data.note);
     console.log(diary);
     reset();
-  });
+  })
 
   return (
     <StyledForm onSubmit={onSubmit}>
@@ -50,7 +50,5 @@ const Form = () => {
 
       <SubmitButton>WRITE</SubmitButton>
     </StyledForm>
-  );
-};
-
-export default Form;
+  )
+}

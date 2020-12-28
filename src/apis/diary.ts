@@ -17,7 +17,7 @@ interface Page {
 const getDiaries = (): Promise<[Diary]> => (
   fetch(`${API_ENDPOINT}/diaries`)
     .then(response => response.json())
-);
+)
 
 const postDiary = (note: string): Promise<Diary> => (
   fetch(
@@ -35,7 +35,14 @@ const postDiary = (note: string): Promise<Diary> => (
     .then(response => response.json())
 )
 
+const getDiaryAudioBuffer = async (context: any, diaryId: string, lang: string): Promise<AudioBuffer> => {
+  const response = await fetch(`${API_ENDPOINT}/diaries/${diaryId}/speech/${lang}`);
+  const arrayBuffer = await response.arrayBuffer();
+  return await context.decodeAudioData(arrayBuffer);
+}
+
 export {
   getDiaries,
   postDiary,
+  getDiaryAudioBuffer,
 };
