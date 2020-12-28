@@ -1,9 +1,10 @@
 import React from "react";
+import { useDispatch } from 'react-redux'
 import styled from "styled-components";
 import { useForm } from 'react-hook-form'
 
 import Button from 'components/Button'
-import { postDiary, Diary } from 'apis/diary'
+import { saveDiary } from './diariesSlice'
 
 const StyledForm = styled.form`
   width: 100%;
@@ -36,11 +37,11 @@ type SubmitData = {
 }
 
 export const DiaryForm = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const dispatch = useDispatch()
+  const { register, handleSubmit, reset } = useForm()
 
   const onSubmit = handleSubmit<SubmitData>(async (data: any) => {
-    const diary: Diary = await postDiary(data.note);
-    console.log(diary);
+    await dispatch(saveDiary(data.note));
     reset();
   })
 
