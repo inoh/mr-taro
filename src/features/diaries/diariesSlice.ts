@@ -45,5 +45,8 @@ export default diariesSlice.reducer
 
 export const fetchDiaries = (): AppThunk => async dispatch => {
   const diaries = await getDiaries()
-  dispatch(diariesReceived(diaries))
+  const sortedDiaries = diaries.sort((before, after) => (
+    (new Date(before.pages.En.posted_at) < new Date(after.pages.En.posted_at)) ? 1 : -1
+  ))
+  dispatch(diariesReceived(sortedDiaries))
 }
