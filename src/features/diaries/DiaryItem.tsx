@@ -44,7 +44,7 @@ export const DiaryItem = ({ id, pages }: Props) => {
     if (id === latestAddedDiaryId) {
       speech(latestAddedDiaryId)
     }
-  }, [latestAddedDiaryId])
+  }, [id, latestAddedDiaryId])
 
   const speech = async (diaryId: string) => {
     const context = new AudioContext()
