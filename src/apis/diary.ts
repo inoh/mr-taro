@@ -1,4 +1,4 @@
-const API_ENDPOINT = 'https://fusy5g07m4.execute-api.ap-northeast-1.amazonaws.com';
+const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT
 
 export interface Diary {
   id: string;
