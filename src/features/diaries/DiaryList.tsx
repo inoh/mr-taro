@@ -12,12 +12,6 @@ const List = styled.ul`
   list-style: none;
 `;
 
-const ListItem = styled.li`
-  padding: 10px;
-  border-bottom: 1px solid rgba(38, 0, 51, 1);
-  background-color: #fff;
-`;
-
 export const DiaryList = () => {
   const dispatch = useDispatch()
   const {
@@ -33,9 +27,7 @@ export const DiaryList = () => {
   return (
     <List>
       {diaries.map(({ id, title, pages }) => (
-        <ListItem key={id}>
-          <DiaryItem id={id} title={title} pages={pages} />
-        </ListItem>
+        <DiaryItem key={id} id={id} title={title} pages={pages} />
       ))}
     </List>
   );

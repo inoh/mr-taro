@@ -1,7 +1,7 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { AppThunk } from 'app/store'
-import { getDiaries } from 'apis/diary'
+import { postDiary, getDiaries } from 'apis/diary'
 
 export type Diary = {
   id: string
@@ -21,6 +21,7 @@ type Page = {
 
 export type DiariesState = {
   entities: Diary[]
+  latestAddedDiaryId?: string
 }
 
 const initialState: DiariesState = {
@@ -31,17 +32,27 @@ export const diariesSlice = createSlice({
   name: 'diaries',
   initialState,
   reducers: {
-    diariesReceived(state, action) {
-      state.entities = action.payload
-    }
+    diarySaved(state, { payload }: PayloadAction<Diary>) {
+      state.entities.unshift(payload)
+      state.latestAddedDiaryId = payload.id
+    },
+    diariesReceived(state, { payload }: PayloadAction<Diary[]>) {
+      state.entities = payload
+    },
   },
 })
 
 const {
+  diarySaved,
   diariesReceived,
 } = diariesSlice.actions
 
 export default diariesSlice.reducer
+
+export const saveDiary = (note: string): AppThunk => async dispatch => {
+  const diary = await postDiary(note)
+  dispatch(diarySaved(diary))
+}
 
 export const fetchDiaries = (): AppThunk => async dispatch => {
   const diaries = await getDiaries()
