@@ -50,8 +50,8 @@ const getDiaryAudioSource = async (
   const arrayBuffer = await response.arrayBuffer();
   return new Promise((resolve) => {
     const source = context.createBufferSource()
-    context.decodeAudioData(arrayBuffer, async (buffer) => {
-      source.buffer = await buffer
+    context.decodeAudioData(arrayBuffer, (buffer) => {
+      source.buffer = buffer
       source.connect(context.destination)
       resolve(source)
     })
