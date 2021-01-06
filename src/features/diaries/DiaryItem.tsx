@@ -6,7 +6,7 @@ import { Microphone } from '@styled-icons/boxicons-solid'
 import { RootState } from 'app/rootReducer'
 import TimeLabel from 'components/TimeLabel'
 import { Diary } from './diariesSlice'
-import { getDiaryAudioBuffer } from 'apis/diary'
+import { getDiaryAudioSource } from 'apis/diary'
 
 const Item = styled.li<{ opened: boolean }>`
   padding: 10px;
@@ -47,10 +47,7 @@ export const DiaryItem = ({ id, pages }: Props) => {
   }, [id, latestAddedDiaryId])
 
   const speech = async (diaryId: string) => {
-    const context = new AudioContext()
-    const source = context.createBufferSource()
-    source.buffer = await getDiaryAudioBuffer(context, diaryId, 'En')
-    source.connect(context.destination)
+    const source = await getDiaryAudioSource(diaryId, 'En')
     source.start()
   }
 
