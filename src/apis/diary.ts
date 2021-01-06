@@ -1,5 +1,11 @@
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT
 
+declare global {
+  interface Window {
+    webkitAudioContext: typeof AudioContext
+  }
+}
+
 export interface Diary {
   id: string;
   title: string;
@@ -35,14 +41,25 @@ const postDiary = (note: string): Promise<Diary> => (
     .then(response => response.json())
 )
 
-const getDiaryAudioBuffer = async (context: any, diaryId: string, lang: string): Promise<AudioBuffer> => {
+const getDiaryAudioSource = async (
+  diaryId: string,
+  lang: string,
+): Promise<AudioBufferSourceNode> => {
+  const context = new (window.AudioContext || window.webkitAudioContext)()
   const response = await fetch(`${API_ENDPOINT}/diaries/${diaryId}/speech/${lang}`);
   const arrayBuffer = await response.arrayBuffer();
-  return await context.decodeAudioData(arrayBuffer);
+  return new Promise((resolve) => {
+    const source = context.createBufferSource()
+    context.decodeAudioData(arrayBuffer, async (buffer) => {
+      source.buffer = await buffer
+      source.connect(context.destination)
+      resolve(source)
+    })
+  })
 }
 
 export {
   getDiaries,
   postDiary,
-  getDiaryAudioBuffer,
+  getDiaryAudioSource,
 };
